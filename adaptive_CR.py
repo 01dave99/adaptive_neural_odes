@@ -44,8 +44,6 @@ def refine_msh(mesh,estis,theta):
     marked=sorted_idx[range(idx+1)]
     new_vs=(mesh[marked]+mesh[marked+1])/2
     new_mesh=np.sort(np.concatenate((mesh,new_vs)))
-    if mesh[0]>mesh[1]:
-        new_mesh=new_mesh[::-1]
     return new_mesh
 
 def eval_CR(y_0,t_0,t_1,F):
@@ -63,7 +61,7 @@ def dtF(t,y):
 def dyF(t,y):
     return np.array([[0,1],[(-2)*5*y[0]*y[1]-1, (-5)*(y[0]**2-1)]])
 
-[sol,mesh]=ode_solve_adaptive(np.array([1,1]),F,dtF,dyF,0,10,1,10**(-5),20)
+[sol,mesh]=ode_solve_adaptive(np.array([1,1]),F,dtF,dyF,0,10,0.1,10**(-5),20)
 plt.plot(mesh,sol[0,:])
 plt.plot(mesh,sol[1,:])
 plt.show()
