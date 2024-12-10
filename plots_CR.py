@@ -53,18 +53,18 @@ def h1_error(sol,sols,grid_fin,grids,len_grids):
     return errs
 #forward pass:
 
-#sol=torch.load("results/ref_sol_forward_CR.pt",weights_only=False)
-sols_ada=torch.load("results/sols_forward_CR_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_forward_CR_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_forward_CR_full.pt",weights_only=False)
+sols_ada=torch.load("results/sols_forward_CR_ada_full.pt",weights_only=False)
+sols_uni=torch.load("results/sols_forward_CR_uni_full.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_forward_CR_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_forward_CR_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_forward_CR_ada_full.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_forward_CR_uni_full.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_forward_CR_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_forward_CR_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_forward_CR_ada_full.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_forward_CR_uni_full.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_forward_CR_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_forward_CR_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_ada=torch.load("results/grids_forward_CR_ada_full.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_uni=torch.load("results/grids_forward_CR_uni_full.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]
@@ -117,18 +117,18 @@ plt.show()
 #plt.show()
 #backward pass:
 
-#sol=torch.load("results/ref_sol_backward_CR.pt")
-sols_ada=torch.load("results/sols_backward_CR_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_backward_CR_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_backward_CR_full.pt")
+sols_ada=torch.load("results/sols_backward_CR_ada_full.pt",weights_only=False)
+sols_uni=torch.load("results/sols_backward_CR_uni_full.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_backward_CR_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_backward_CR_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_backward_CR_ada_full.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_backward_CR_uni_full.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_backward_CR_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_backward_CR_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_backward_CR_ada_full.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_backward_CR_uni_full.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_backward_CR_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_backward_CR_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_ada=torch.load("results/grids_backward_CR_ada_full.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_uni=torch.load("results/grids_backward_CR_uni_full.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]

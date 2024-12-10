@@ -89,8 +89,8 @@ print("Training concluded!")
 sol=odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="dopri8")
 torch.save(sol,"results/ref_sol_forward_CR.pt")
 
-sol1=odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.1,'theta':0.7,'conv_ana':True,'file_id':"forward_CR_ada",'max_nodes':max_n})
-odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.1,'theta':1.,'conv_ana':True,'file_id':"forward_CR_uni",'max_nodes':max_n})
+sol1=odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.01,'theta':0.7,'conv_ana':True,'file_id':"forward_CR_ada",'max_nodes':max_n})
+odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.01,'theta':1.,'conv_ana':True,'file_id':"forward_CR_uni",'max_nodes':max_n})
 
 print("Forward pass finished.")
 #backward-pass:

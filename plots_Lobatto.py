@@ -178,13 +178,13 @@ for j in range((sol_len-1)):
 sol=sol_uni
 errs_uni=h1_error(sol,sols_uni,grid_fin_uni,grids_uni,len_grids_uni)
 
-plt.loglog(len_grids_ada.detach().numpy(), estis_ada.detach().numpy(), "+-", label=r"adaptive (estimator)")
-plt.loglog(len_grids_uni.detach().numpy(), estis_uni.detach().numpy(), "x-", label=r"uniform (estimator)")
-plt.loglog(len_grids_ada[:-1].detach().numpy(), errs_ada.detach().numpy(), "o-", label=r"adaptive (error)")
-plt.loglog(len_grids_uni[:-1].detach().numpy(), errs_uni.detach().numpy(), "v-", label=r"uniform (error)")
+plt.loglog(len_grids_ada.detach().numpy()/2., estis_ada.detach().numpy(), "+-", label=r"adaptive (estimator)")
+plt.loglog(len_grids_uni.detach().numpy()/2., estis_uni.detach().numpy(), "x-", label=r"uniform (estimator)")
+plt.loglog(len_grids_ada[:-1].detach().numpy()/2., errs_ada.detach().numpy(), "o-", label=r"adaptive (error)")
+plt.loglog(len_grids_uni[:-1].detach().numpy()/2., errs_uni.detach().numpy(), "v-", label=r"uniform (error)")
 
 # Reference line: 1/N
-N = len_grids_uni.detach().numpy()
+N = len_grids_uni.detach().numpy()/2.
 plt.loglog(N, 1000*1/N**2, "--", label=r"${\# \mathcal{T}}^{-2}$")
 
 plt.xlabel(r"$\# \mathcal{T}$")
@@ -278,13 +278,13 @@ for j in range((sol_len-1)):
 sol=sol_uni
 errs_uni=h1_error(sol,sols_uni,grid_fin_uni,grids_uni,len_grids_uni)
 
-plt.loglog(len_grids_ada.detach().numpy(), estis_ada.detach().numpy(), "+-", label=r"adaptive (estimator)")
-plt.loglog(len_grids_uni.detach().numpy(), estis_uni.detach().numpy(), "x-", label=r"uniform (estimator)")
-plt.loglog(len_grids_ada[:-1].detach().numpy(), errs_ada.detach().numpy(), "o-", label=r"adaptive (error)")
-plt.loglog(len_grids_uni[:-1].detach().numpy(), errs_uni.detach().numpy(), "v-", label=r"uniform (error)")
+plt.loglog(len_grids_ada.detach().numpy()/2., estis_ada.detach().numpy(), "+-", label=r"adaptive (estimator)")
+plt.loglog(len_grids_uni.detach().numpy()/2., estis_uni.detach().numpy(), "x-", label=r"uniform (estimator)")
+plt.loglog(len_grids_ada[:-1].detach().numpy()/2., errs_ada.detach().numpy(), "o-", label=r"adaptive (error)")
+plt.loglog(len_grids_uni[:-1].detach().numpy()/2., errs_uni.detach().numpy(), "v-", label=r"uniform (error)")
 
 # Reference line: 1/N
-N = len_grids_uni.detach().numpy()
+N = len_grids_uni.detach().numpy()/2.
 plt.loglog(N, 10000000*1/N**2, "--", label=r"${\# \mathcal{T}}^{-2}$")
 
 plt.xlabel(r"$\# \mathcal{T}$")
