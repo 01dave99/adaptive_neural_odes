@@ -14,7 +14,7 @@ rc('text.latex', preamble=r'\usepackage{amsmath} \usepackage{amsfonts} \usepacka
 
 
 #Euler:
-@profile
+
 def h1_error(sol,sols,grid_fin,grids,len_grids):
     sol_len=len(sol)
     errs=torch.zeros(len(len_grids)-1,dtype=torch.float64)
@@ -62,18 +62,18 @@ def h1_error(sol,sols,grid_fin,grids,len_grids):
     return errs
 #forward pass:
 
-#sol=torch.load("results/ref_sol_mnist_forward_Euler.pt",weights_only=False)
-sols_ada=torch.load("results/sols_mnist_forward_Euler_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_mnist_forward_Euler_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_latent_forward_Euler.pt",weights_only=False)
+sols_ada=torch.load("results/sols_latent_forward_Euler_ada.pt",weights_only=False)
+sols_uni=torch.load("results/sols_latent_forward_Euler_uni.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_mnist_forward_Euler_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_mnist_forward_Euler_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_latent_forward_Euler_ada.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_latent_forward_Euler_uni.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_mnist_forward_Euler_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_mnist_forward_Euler_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_latent_forward_Euler_ada.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_latent_forward_Euler_uni.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_mnist_forward_Euler_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_mnist_forward_Euler_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_ada=torch.load("results/grids_latent_forward_Euler_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_uni=torch.load("results/grids_latent_forward_Euler_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]
@@ -126,22 +126,27 @@ plt.show()
 #plt.show()
 #backward pass:
 
-#sol=torch.load("results/ref_sol_mnist_backward_Euler.pt")
-sols_ada=torch.load("results/sols_mnist_backward_Euler_ada.pt",weights_only=False).detach()[:,:64]
-sols_uni=torch.load("results/sols_mnist_backward_Euler_uni.pt",weights_only=False).detach()[:,:64]
 
-len_grids_ada=torch.load("results/len_grids_mnist_backward_Euler_ada.pt",weights_only=False).detach()
-len_grids_uni=torch.load("results/len_grids_mnist_backward_Euler_uni.pt",weights_only=False).detach()
+def load():
+    #sol=torch.load("results/ref_sol_latent_backward_Euler.pt")
+    sols_ada=torch.load("results/sols_latent_backward_Euler_ada.pt",weights_only=False).detach().requires_grad_(False)
+    sols_uni=torch.load("results/sols_latent_backward_Euler_uni.pt",weights_only=False).detach().requires_grad_(False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_mnist_backward_Euler_ada.pt",weights_only=False)).detach()
-estis_uni=torch.sqrt(torch.load("results/estis_mnist_backward_Euler_uni.pt",weights_only=False)).detach()
+    len_grids_ada=torch.load("results/len_grids_latent_backward_Euler_ada.pt",weights_only=False).detach().requires_grad_(False)
+    len_grids_uni=torch.load("results/len_grids_latent_backward_Euler_uni.pt",weights_only=False).detach().requires_grad_(False)
 
-grids_ada=torch.load("results/grids_mnist_backward_Euler_ada.pt",weights_only=False).detach()[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_mnist_backward_Euler_uni.pt",weights_only=False).detach()[:-len_grids_uni[-1]]
+    estis_ada=torch.sqrt(torch.load("results/estis_latent_backward_Euler_ada.pt",weights_only=False)).detach().requires_grad_(False)
+    estis_uni=torch.sqrt(torch.load("results/estis_latent_backward_Euler_uni.pt",weights_only=False)).detach().requires_grad_(False)
 
-len_grids_ada=len_grids_ada[:-1]
-len_grids_uni=len_grids_uni[:-1]
+    grids_ada=torch.load("results/grids_latent_backward_Euler_ada.pt",weights_only=False).detach().requires_grad_(False)[:-len_grids_ada[-1]]
+    grids_uni=torch.load("results/grids_latent_backward_Euler_uni.pt",weights_only=False).detach().requires_grad_(False)[:-len_grids_uni[-1]]
 
+    len_grids_ada=len_grids_ada[:-1]
+    len_grids_uni=len_grids_uni[:-1]
+
+    return sols_ada,sols_uni,len_grids_ada,len_grids_uni,estis_ada,estis_uni,grids_ada,grids_uni
+
+sols_ada,sols_uni,len_grids_ada,len_grids_uni,estis_ada,estis_uni,grids_ada,grids_uni=load()
 #calc H1 norm:
 sol=sols_ada[range(-len_grids_ada[-1],0),::]
 print(sol.shape)

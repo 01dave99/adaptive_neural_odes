@@ -97,18 +97,18 @@ def h1_error(sol,sols,grid_fin,grids,len_grids,method="Lobatto"):
     return errs
 #forward pass:
 
-#sol=torch.load("results/ref_sol_forward_Lobatto.pt")
-sols_ada=torch.load("results/sols_forward_Lobatto_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_forward_Lobatto_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_latent_forward_Lobatto_full_full.pt")
+sols_ada=torch.load("results/sols_latent_forward_Lobatto_ada.pt",weights_only=False)
+sols_uni=torch.load("results/sols_latent_forward_Lobatto_uni.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_forward_Lobatto_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_forward_Lobatto_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_latent_forward_Lobatto_ada.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_latent_forward_Lobatto_uni.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_forward_Lobatto_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_forward_Lobatto_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_latent_forward_Lobatto_ada.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_latent_forward_Lobatto_uni.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_forward_Lobatto_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_forward_Lobatto_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_ada=torch.load("results/grids_latent_forward_Lobatto_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_uni=torch.load("results/grids_latent_forward_Lobatto_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]
@@ -192,23 +192,23 @@ plt.xlabel(r"$\# \mathcal{T}$")
 
 plt.legend()
 plt.grid(True)
-plt.show()
-
+plt.savefig("latent_Lobatto_forward_real.eps")
+plt.clf()
 #backward pass:
 
-#sol=torch.load("results/ref_sol_backward_Lobatto.pt")
-sols_ada=torch.load("results/sols_backward_Lobatto_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_backward_Lobatto_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_latent_backward_Lobatto_full_full.pt")
+sols_ada=torch.load("results/sols_latent_backward_Lobatto_ada.pt",weights_only=False)
+sols_uni=torch.load("results/sols_latent_backward_Lobatto_uni.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_backward_Lobatto_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_backward_Lobatto_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_latent_backward_Lobatto_ada.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_latent_backward_Lobatto_uni.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_backward_Lobatto_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_backward_Lobatto_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_latent_backward_Lobatto_ada.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_latent_backward_Lobatto_uni.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_backward_Lobatto_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_ada=torch.load("results/grids_latent_backward_Lobatto_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
 
-grids_uni=torch.load("results/grids_backward_Lobatto_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_uni=torch.load("results/grids_latent_backward_Lobatto_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]
@@ -285,11 +285,11 @@ plt.loglog(len_grids_uni[:-1].detach().numpy()/2., errs_uni.detach().numpy(), "v
 
 # Reference line: 1/N
 N = len_grids_uni.detach().numpy()/2.
-plt.loglog(N, 10000000*1/N**2, "--", label=r"${\# \mathcal{T}}^{-2}$")
+plt.loglog(N, 100*1/N**2, "--", label=r"${\# \mathcal{T}}^{-2}$")
 
 plt.xlabel(r"$\# \mathcal{T}$")
 
 
 plt.legend()
 plt.grid(True)
-plt.show()
+plt.savefig("latent_Lobatto_backward_real.eps")

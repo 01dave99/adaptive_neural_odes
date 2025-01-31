@@ -10,7 +10,7 @@ rc('font', family='serif')
 rc('text.latex', preamble=r'\usepackage{amsmath} \usepackage{amsfonts} \usepackage{amssymb}')
 
 
-#CR:
+#RK4:
 def h1_error(sol,sols,grid_fin,grids,len_grids):
     sol_len=len(sol)
     errs=torch.zeros(len(len_grids)-1,dtype=torch.float64)
@@ -53,18 +53,18 @@ def h1_error(sol,sols,grid_fin,grids,len_grids):
     return errs
 #forward pass:
 
-#sol=torch.load("results/ref_sol_latent_forward_CR_eff.pt",weights_only=False)
-sols_ada=torch.load("results/sols_latent_forward_CR_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_latent_forward_CR_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_forward_RK4.pt",weights_only=False)
+sols_ada=torch.load("results/sols_forward_RK4_ada.pt",weights_only=False)
+sols_uni=torch.load("results/sols_forward_RK4_uni.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_latent_forward_CR_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_latent_forward_CR_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_forward_RK4_ada.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_forward_RK4_uni.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_latent_forward_CR_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_latent_forward_CR_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_forward_RK4_ada.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_forward_RK4_uni.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_latent_forward_CR_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_latent_forward_CR_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_ada=torch.load("results/grids_forward_RK4_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_uni=torch.load("results/grids_forward_RK4_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]
@@ -110,26 +110,25 @@ plt.xlabel(r"$\# \mathcal{T}$")
 
 plt.legend()
 plt.grid(True)
-plt.savefig("CR_forward.svg")
-plt.clf()
+plt.show()
 
 
 #plt.plot(grid_fin_uni,sol[:,0])
 #plt.show()
 #backward pass:
 
-#sol=torch.load("results/ref_sol_latent_backward_CR_eff.pt")
-sols_ada=torch.load("results/sols_latent_backward_CR_ada.pt",weights_only=False)
-sols_uni=torch.load("results/sols_latent_backward_CR_uni.pt",weights_only=False)
+#sol=torch.load("results/ref_sol_backward_RK4.pt")
+sols_ada=torch.load("results/sols_backward_RK4_ada.pt",weights_only=False)
+sols_uni=torch.load("results/sols_backward_RK4_uni.pt",weights_only=False)
 
-len_grids_ada=torch.load("results/len_grids_latent_backward_CR_ada.pt",weights_only=False)
-len_grids_uni=torch.load("results/len_grids_latent_backward_CR_uni.pt",weights_only=False)
+len_grids_ada=torch.load("results/len_grids_backward_RK4_ada.pt",weights_only=False)
+len_grids_uni=torch.load("results/len_grids_backward_RK4_uni.pt",weights_only=False)
 
-estis_ada=torch.sqrt(torch.load("results/estis_latent_backward_CR_ada.pt",weights_only=False))
-estis_uni=torch.sqrt(torch.load("results/estis_latent_backward_CR_uni.pt",weights_only=False))
+estis_ada=torch.sqrt(torch.load("results/estis_backward_RK4_ada.pt",weights_only=False))
+estis_uni=torch.sqrt(torch.load("results/estis_backward_RK4_uni.pt",weights_only=False))
 
-grids_ada=torch.load("results/grids_latent_backward_CR_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
-grids_uni=torch.load("results/grids_latent_backward_CR_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
+grids_ada=torch.load("results/grids_backward_RK4_ada.pt",weights_only=False)[:-len_grids_ada[-1]]
+grids_uni=torch.load("results/grids_backward_RK4_uni.pt",weights_only=False)[:-len_grids_uni[-1]]
 
 len_grids_ada=len_grids_ada[:-1]
 len_grids_uni=len_grids_uni[:-1]
@@ -176,7 +175,7 @@ plt.xlabel(r"$\# \mathcal{T}$")
 
 plt.legend()
 plt.grid(True)
-plt.savefig("CR_backward.svg")
+plt.show()
 
 #plt.plot(grid_fin_uni,sol[:,0])
 #plt.show()

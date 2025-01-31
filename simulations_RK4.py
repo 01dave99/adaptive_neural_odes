@@ -3,9 +3,8 @@ from torchdiffeq import odeint_adjoint as odeint
 from torchdiffeq import odeint as odeint2
 import numpy as np
 import matplotlib.pyplot as plt
-import cProfile
 
-#Crank-Nicholson:
+#RK4ank-Nicholson:
 
 #training:
 device = torch.device('cuda:' if torch.cuda.is_available() else 'cpu')
@@ -14,7 +13,7 @@ batch_time=10
 batch_size=10
 niters=100
 test_freq=20
-max_n=10000
+max_n=50000
 
 #true right-hand-side
 true_A = torch.tensor([[-0.1, 2.0], [-2.0, -0.1]],dtype=torch.float64)
@@ -45,16 +44,9 @@ class ODEFunc(torch.nn.Module):
         return self.net(y**3)
 
 #generate training-data
-
-with cProfile.Profile() as pr:
-   
-    with torch.no_grad():
-        true_y = odeint(Lambda(), true_y0, t, atol=1e-2, method='adaptiveCR',options={'step_size':0.05,'theta':0.7,'max_nodes':max_n,'efficient':True,'conv_ana':True})
-        print("Training data generated!")
-    pr.print_stats(sort='cumulative')
-
-
-  
+with torch.no_grad():
+    true_y = odeint(Lambda(), true_y0, t, atol=1e-2, method='adaptiveRK4',options={'step_size':0.01,'theta':0.7,'max_nodes':max_n,'efficient':True})
+    print("Training data generated!")
 
 def get_batch():
     s = torch.from_numpy(np.random.choice(np.arange(data_size - batch_time, dtype=np.int64), batch_size, replace=False))
@@ -73,7 +65,7 @@ optimizer = torch.optim.RMSprop(func.parameters(), lr=1e-3)
 for itr in range(1, niters + 1):
     optimizer.zero_grad()
     batch_y0, batch_t, batch_y = get_batch()
-    pred_y = odeint(func, batch_y0, batch_t , method='adaptiveCR',atol=1e-2,faster_adj_solve=True,options={'step_size':0.1,'theta':0.7,'efficient':True}).to(device)
+    pred_y = odeint(func, batch_y0, batch_t , method='adaptiveRK4',atol=1e-2,faster_adj_solve=True,options={'step_size':0.01,'theta':0.7,'max_nodes':max_n,'efficient':True}).to(device)
     loss = torch.mean(torch.abs(pred_y - batch_y))
     loss.backward()
     optimizer.step()
@@ -81,7 +73,7 @@ for itr in range(1, niters + 1):
 
     if itr % test_freq == 0:
         with torch.no_grad():
-            pred_y = odeint(func, true_y0, t,atol=1e-2, method='adaptiveCR',options={'step_size':0.1,'theta':0.7,'efficient':True})
+            pred_y = odeint(func, true_y0, t,atol=1e-2, method='adaptiveRK4',options={'step_size':0.01,'theta':0.7,'max_nodes':max_n,'efficient':True})
             loss = torch.mean(torch.abs(pred_y - true_y))
             print('Iter {:04d} | Total Loss {:.6f}'.format(itr, loss.item()))
             #visualize(true_y, pred_y, func, ii)
@@ -95,10 +87,10 @@ print("Training concluded!")
 
 #reference-solution:
 #sol=odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="dopri8")
-#torch.save(sol,"results/ref_sol_forward_CR.pt")
+#torch.save(sol,"results/ref_sol_forward_RK4.pt")
 
-sol1=odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.1,'theta':0.7,'conv_ana':True,'file_id':"forward_CR_ada_eff",'max_nodes':max_n,'efficient':True})
-odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.1,'theta':1.,'conv_ana':True,'file_id':"forward_CR_uni_eff",'max_nodes':max_n,'efficient':True})
+sol1=odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveRK4",options={'step_size':0.01,'theta':0.7,'conv_ana':True,'file_id':"forward_RK4_ada",'max_nodes':max_n,'efficient':True})
+odeint2(func,true_y0,torch.linspace(0,25,1000,dtype=torch.float64),method="adaptiveRK4",options={'step_size':0.01,'theta':1.,'conv_ana':True,'file_id':"forward_RK4_uni",'max_nodes':max_n,'efficient':True})
 
 print("Forward pass finished.")
 #backward-pass:
@@ -154,10 +146,10 @@ def augmented_dynamics(t, y_aug):
 
 #flatten sol:
 #sol = torch.cat([sol_.reshape((1000,-1)) for sol_ in sol],dim=1)
-#torch.save(sol,"results/ref_sol_backward_CR.pt")
+#torch.save(sol,"results/ref_sol_backward_RK4.pt")
 
-odeint2(augmented_dynamics,aug_state,torch.linspace(25,0,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.1,'theta':0.7,'conv_ana':True,'faster_adj_solve':True,"adjoint_params":adjoint_params,"file_id":"backward_CR_ada_eff",'max_nodes':max_n,'original_func':func, 'shapes' :[y0_.shape for y0_ in aug_state],'efficient':False})
-odeint2(augmented_dynamics,aug_state,torch.linspace(25,0,1000,dtype=torch.float64),method="adaptiveCR",options={'step_size':0.1,'theta':1.,'conv_ana':True,'faster_adj_solve':True,"adjoint_params":adjoint_params,"file_id":"backward_CR_uni_eff",'max_nodes':max_n,'original_func':func, 'shapes' :[y0_.shape for y0_ in aug_state],'efficient':False})
+odeint2(augmented_dynamics,aug_state,torch.linspace(25,0,1000,dtype=torch.float64),method="adaptiveRK4",options={'step_size':0.01,'theta':0.7,'conv_ana':True,'faster_adj_solve':True,"adjoint_params":adjoint_params,"file_id":"backward_RK4_ada",'max_nodes':max_n,'original_func':func, 'shapes' :[y0_.shape for y0_ in aug_state],'efficient':True})
+odeint2(augmented_dynamics,aug_state,torch.linspace(25,0,1000,dtype=torch.float64),method="adaptiveRK4",options={'step_size':0.01,'theta':1.,'conv_ana':True,'faster_adj_solve':True,"adjoint_params":adjoint_params,"file_id":"backward_RK4_uni",'max_nodes':max_n,'original_func':func, 'shapes' :[y0_.shape for y0_ in aug_state],'efficient':True})
 
 print("Backward pass finished.")
 
